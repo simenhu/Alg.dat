@@ -19,37 +19,36 @@ def max_value(widths, heights, values, paper_width, paper_height):
     #makes an array to store the sub problems
     max_values = [[0 for y in range(paper_width+1)] for x in range(paper_width+1)]
 
-    w = 1
-    for h in range(1,paper_height+1):
+    w = 1 #start iterating with width index = 1
+    for h in range(1,paper_height+1): #iterates from height = 1 to height = the height of the paper
 
-        while w <= paper_width:
-            #print(w, end="")
-            q = 0
-            for seddel in range(len(widths)):
-                seddel_width, seddel_height = widths[seddel], heights[seddel]
+        while w <= paper_width: #iterates until w is higher than the width of the paper
+            q = 0 #variable to hold the max value for this sub problem
+            for seddel in range(len(widths)): #iterates through the seddels to find the best match
+                seddel_width, seddel_height = widths[seddel], heights[seddel] #stores the width and height for the current seddel
 
                 #here the seddel lay flatt
-                if w>=seddel_width and h>=seddel_height:
-                    #this is the scenario where we cut the paper horisontal
+                if w>=seddel_width and h>=seddel_height:#this chacks if the seddel fits in the original orientation
+                    #this is the scenario where we cut the paper vertical
                     w1, h1 = w-seddel_width, h
                     w2, h2 = seddel_width, h - seddel_height
 
                     #this is where we cut the paper vertical
-                    w3, h3 = w - seddel_width, h-seddel_height
+                    w3, h3 = w - seddel_width, seddel_height
                     w4, h4 = w, h - seddel_height
 
                     q = max(q, max_values[w1][h1]+max_values[w2][h2]+values[seddel],
                             max_values[w3][h3]+max_values[w4][h4]+values[seddel])
 
                 #here the seddel stand up
-                seddel_width, seddel_height = seddel_height, seddel_width
+                seddel_width, seddel_height = seddel_height, seddel_width #here we switch the height and width of the seddel to rotate it 90 degrees
                 if w >= seddel_width and h >= seddel_height:
-                    # this is the scenario where we cut the paper horisontal
+                    # this is the scenario where we cut the paper vertical
                     w1, h1 = w - seddel_width, h
                     w2, h2 = seddel_width, h - seddel_height
 
                     # this is where we cut the paper vertical
-                    w3, h3 = w - seddel_width, h - seddel_height
+                    w3, h3 = w - seddel_width, seddel_height
                     w4, h4 = w, h - seddel_height
 
                     q = max(q, max_values[w1][h1] + max_values[w2][h2] + values[seddel],
@@ -58,11 +57,11 @@ def max_value(widths, heights, values, paper_width, paper_height):
             max_values[h][w] = q
 
             w += 1
-        #print("(%d)" % h, end="\n")
 
         w = h+1
 
     return max_values[paper_width][paper_height]
+
 
 
 def test():
@@ -88,4 +87,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test()
